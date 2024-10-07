@@ -21,24 +21,28 @@ app = Flask(__name__)
 
 # Channel ID where the bot will send messages
 CHANNEL_ID = int(os.environ.get('CHANNEL_ID'))
-USER_ID = os.environ.get('USER_ID')
 
+# User IDs as a dictionary loaded from environment variables
+USER_ID = {
+    'EM': os.environ.get('USER_ID_EM'),
+    'Sarah White': os.environ.get('USER_ID_SARAH_WHITE'),
+    'Megasley': os.environ.get('USER_ID_MEGASLEY'),
+    'Yami': os.environ.get('USER_ID_YAMI'),
+    'Satoshee': os.environ.get('USER_ID_SATOSHEE'),
+    'Orion': os.environ.get('USER_ID_ORION')
+}
 
 @app.route('/')
 def index():
     return "Bot is Alive"
 
-
 @app.route('/www', methods=['POST'])
 def www():
-    user_id = USER_ID
-
     data = request.get_json()
-    # print(data)
 
     for task in data['tasks']:
-        name = task['accountable']  # Directly retrieve the name as a string
-        mention = user_id.get(name, 'Unknown User')  # Get mention or default to 'Unknown User'
+        name = task['accountable']
+        mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
 
         message = f"""
 **WWW Task Notification** ⚠️
@@ -59,7 +63,6 @@ Please complete the task as soon as possible.
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
-    # print(f"Received webhook: {data}")
 
     entry_date = data['columnData']['col5']
 
@@ -82,29 +85,25 @@ def webhook():
 def update():
     data = request.get_json()
 
-    user_id = USER_ID
-
     name = data['columnData']['accountable']
     task = data['columnData']['task']
     old_status = data['old']
     new_status = data['new']
     due = data['columnData']['due']
 
-    mention = user_id.get(name, 'Unknown User')
-    # print(f"Received webhook: {data}")
+    mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
 
     if new_status == 'Ready for review':
         message = f"""
 -------------------------------
 **Task Status Changed** !
 
-Hey {user_id['Sarah White']}, there's a task waiting for you to review.
+Hey {USER_ID.get('Sarah White')}, there's a task waiting for you to review.
 
 ***Task:*** {task}
 ***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
 ***Accountable:*** {mention}
-    """
-
+        """
     else:
         message = f"""
 -------------------------------
@@ -113,7 +112,7 @@ Hey {user_id['Sarah White']}, there's a task waiting for you to review.
 ***Task:*** {task}
 ***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
 ***Accountable:*** {mention}
-            """
+        """
 
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
