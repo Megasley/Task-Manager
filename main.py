@@ -98,7 +98,7 @@ def update():
 -------------------------------
 **Task Status Changed** !
 
-Hey {USER_ID.get('Sarah White')}, there's a task waiting for you to review.
+Hey {USER_ID['Sarah White']} there's a task waiting for you to review.
 
 ***Task:*** {task}
 ***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
