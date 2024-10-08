@@ -45,7 +45,7 @@ def www():
         mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
 
         message = f"""
-**WWW Task Notification** ⚠️
+**WWW Task Notification** 🔔
 
 Hey {mention}, you have an overdue task on WWW sheet.
 
@@ -68,7 +68,7 @@ def webhook():
 
     message = f"""
 ------------------------------- 
-**Feedback Task Assigned** ⚠️!
+**Feedback Task Assigned** 📋
 
 ***Row:*** **{data['row']}**
 ***Assigned to:*** {data['new']}
@@ -107,9 +107,53 @@ Hey {USER_ID['Sarah White']} there's a task waiting for you to review.
     else:
         message = f"""
 -------------------------------
-*Task Status Changed from* **{old_status}** *to* **{new_status}** 💫!
+*Task Status Changed from* **{old_status}** *to* **{new_status}** 🚀
 
 ***Task:*** {task}
+***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Accountable:*** {mention}
+        """
+
+    asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
+
+    return jsonify({"status": "success", "message": "Webhook received"}), 200
+
+
+@app.route('/comment', methods=['POST'])
+def comment():
+    data = request.get_json()
+
+    name = data['columnData']['accountable']
+    task = data['columnData']['task']
+    comment = data['new']
+    due = data['columnData']['due']
+    status = data['columnData']['status']
+    sarah_comment = data['columnData']['sarahComment']
+    member_comment = data['columnData']['memberComment']
+
+    mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
+
+    if comment == sarah_comment:
+        message = f"""
+-------------------------------
+*{USER_ID['Sarah White']} added a comment for {mention} 💬
+
+***Task:*** {task}
+***Status:*** {status}
+***Sarah's Comment:*** {sarah_comment}
+***{name}'s Comment:*** {member_comment}
+***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Accountable:*** {mention}
+        """
+
+    else:
+        message = f"""
+-------------------------------
+*{mention} added a comment for {USER_ID['Sarah White']} 💬
+
+***Task:*** {task}
+***Sarah's Comment:*** {sarah_comment}
+***{name}'s Comment:*** {member_comment}
 ***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
 ***Accountable:*** {mention}
         """
