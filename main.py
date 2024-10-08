@@ -136,7 +136,7 @@ def comment():
     if comment == sarah_comment:
         message = f"""
 -------------------------------
-*{USER_ID['Sarah White']} added a comment for {mention} 💬
+*{USER_ID['Sarah White']} added a comment for {mention}* 💬
 
 ***Task:*** {task}
 ***Status:*** {status}
@@ -149,7 +149,7 @@ def comment():
     else:
         message = f"""
 -------------------------------
-*{mention} added a comment for {USER_ID['Sarah White']} 💬
+*{mention} added a comment for {USER_ID['Sarah White']}* 💬
 
 ***Task:*** {task}
 ***Sarah's Comment:*** {sarah_comment}
