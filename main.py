@@ -163,8 +163,6 @@ def comment():
 ***Accountable:*** {mention}
             """
         else:
-            if sarah_comment == "(Sarah's comment)":
-                sarah_comment == "(empty)"
             message = f""" -------------------------------
 *{mention} added a comment for {USER_ID['Sarah White']}* 💬
 
