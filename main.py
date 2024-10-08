@@ -90,16 +90,18 @@ def update():
     old_status = data['old']
     new_status = data['new']
     due = data['columnData']['due']
+    row = data['row']
 
     mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
 
     if new_status == 'Ready for review':
         message = f"""
 -------------------------------
-**Task Status Changed** !
+*Task Status Changed from* **{old_status}** *to* **{new_status}** 🚀
 
-Hey {USER_ID['Sarah White']} there's a task waiting for you to review.
+Hey {USER_ID['Sarah White']}, please review.
 
+***Row:*** {row}
 ***Task:*** {task}
 ***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
 ***Accountable:*** {mention}
