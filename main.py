@@ -121,46 +121,67 @@ Hey {USER_ID['Sarah White']} there's a task waiting for you to review.
 
 @app.route('/comment', methods=['POST'])
 def comment():
-    data = request.get_json()
+    try:
+        data = request.get_json()
+        if not data:
+            raise ValueError("No JSON data received")
 
-    name = data['columnData']['accountable']
-    task = data['columnData']['task']
-    comment = data['new']
-    due = data['columnData']['due']
-    status = data['columnData']['status']
-    sarah_comment = data['columnData']['sarahComment']
-    member_comment = data['columnData']['memberComment']
+        column_data = data.get('columnData', {})
+        
+        # Extract values with default fallbacks
+        name = column_data.get('accountable', 'Unknown')
+        task = column_data.get('task', 'No task specified')
+        due = column_data.get('due', '')
+        status = column_data.get('status', 'Unknown')
+        sarah_comment = column_data.get('sarahComment', '')
+        member_comment = column_data.get('memberComment', '')
 
-    mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
+        # Handle new comment
+        comment = data.get('new', 'deleted')
 
-    if comment == sarah_comment:
-        message = f"""
--------------------------------
+        # Get mention, with fallback
+        mention = USER_ID.get(name, 'Unknown User')
+
+        # Parse due date, with error handling
+        try:
+            due_date = datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date() if due else 'Not specified'
+        except ValueError:
+            due_date = 'Invalid date format'
+
+        # Determine message format
+        if comment == sarah_comment:
+            message = f""" -------------------------------
 *{USER_ID['Sarah White']} added a comment for {mention}* 💬
 
 ***Task:*** {task}
 ***Status:*** {status}
 ***Sarah's Comment:*** {sarah_comment}
 ***{name}'s Comment:*** {member_comment}
-***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Due:*** {due_date}
 ***Accountable:*** {mention}
-        """
-
-    else:
-        message = f"""
--------------------------------
+            """
+        else:
+            if sarah_comment == "Sarah's comment":
+                sarah_comment == "empty"
+            message = f""" -------------------------------
 *{mention} added a comment for {USER_ID['Sarah White']}* 💬
 
 ***Task:*** {task}
 ***Sarah's Comment:*** {sarah_comment}
 ***{name}'s Comment:*** {member_comment}
-***Due:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Due:*** {due_date}
 ***Accountable:*** {mention}
-        """
+            """
 
-    asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
+        # Send message to Discord
+        asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
-    return jsonify({"status": "success", "message": "Webhook received"}), 200
+        return jsonify({"status": "success", "message": "Webhook received"}), 200
+
+    except Exception as e:
+        # Log the error for debugging
+        app.logger.error(f"Error processing webhook: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 async def send_to_discord(message):
