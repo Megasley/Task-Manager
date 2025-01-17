@@ -29,7 +29,9 @@ USER_ID = {
     'Megasley': os.environ.get('USER_ID_MEGASLEY'),
     'Yami': os.environ.get('USER_ID_YAMI'),
     'Satoshee': os.environ.get('USER_ID_SATOSHEE'),
-    'Orion': os.environ.get('USER_ID_ORION')
+    'Everything Satoshi': os.environ.get('USER_ID_ES'),
+    'Lys': os.environ.get('USER_ID_LYS'),
+    'Vviey': os.environ.get('USER_ID_VVY'),
 }
 
 @app.route('/')
