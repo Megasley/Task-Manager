@@ -84,7 +84,7 @@ def webhook():
 
 # --------------------------------------------------------------------------------------
 @app.route('/sprint', methods=['POST'])
-def webhook():
+def sprint():
     data = request.get_json()
 
     team_member = USER_ID.get(data['teamMember'], 'Unknown User')
