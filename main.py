@@ -113,9 +113,9 @@ def happenings():
     
     message = f"""
     ------------------------------- 
-    **Notable Happenings of The Week** 🔕
+    **Notable Happenings of The Week** 📝
 
-    {events_list}
+{events_list}
     """
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
