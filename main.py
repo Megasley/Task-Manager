@@ -27,11 +27,11 @@ USER_ID = {
     'EM': os.environ.get('USER_ID_EM'),
     'Sarah White': os.environ.get('USER_ID_SARAH_WHITE'),
     'Megasley': os.environ.get('USER_ID_MEGASLEY'),
-    'Yami': os.environ.get('USER_ID_YAMI'),
     'Satoshee': os.environ.get('USER_ID_SATOSHEE'),
-    'Everything Satoshee': os.environ.get('USER_ID_ES'),
+    'EVerything Satoshee': os.environ.get('USER_ID_ES'),
     'Lys': os.environ.get('USER_ID_LYS'),
     'Vviey': os.environ.get('USER_ID_VVY'),
+    'Everything Satoshee': os.environ.get('USER_ID_EV'),
 }
 
 @app.route('/')
@@ -98,7 +98,29 @@ def sprint():
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
+
 #---------------------------------------------------------------------------------------
+
+@app.route('/happenings', methods=['POST'])
+def happenings():
+    data = request.get_json()  # Receive JSON payload
+
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
+    # Build message with all events
+    events_list = "\n".join([f"{date}: {event}" for date, event in data.items()])
+    
+    message = f"""
+    ------------------------------- 
+    **Notable Happenings of The Week** 🔕
+
+    {events_list}
+    """
+    asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
+
+    return jsonify({"status": "success", "message": "Webhook received"}), 200
+# --------------------------------------------------------------------------------------
 
 @app.route('/update', methods=['POST'])
 def update():
