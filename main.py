@@ -82,6 +82,23 @@ def webhook():
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
 
+# --------------------------------------------------------------------------------------
+@app.route('/sprint', methods=['POST'])
+def webhook():
+    data = request.get_json()
+
+    team_member = USER_ID.get(data['teamMember'], 'Unknown User')
+
+    message = f"""
+------------------------------- 
+**Reminder** 🔕
+
+{team_member}, You have not filled out your sprint review today!
+"""
+    asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
+
+    return jsonify({"status": "success", "message": "Webhook received"}), 200
+#---------------------------------------------------------------------------------------
 
 @app.route('/update', methods=['POST'])
 def update():
