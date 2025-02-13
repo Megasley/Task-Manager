@@ -112,8 +112,8 @@ def happenings():
     events_list = "\n".join([f"{date}: {event}" for date, event in data.items()])
     
     message = f"""
-    ------------------------------- 
-    **Notable Happenings of The Week** 📝
+ ------------------------------- 
+**Notable Happenings of The Week** 📝
 
 {events_list}
     """
