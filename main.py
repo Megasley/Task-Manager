@@ -116,6 +116,7 @@ def happenings():
 **Notable Happenings of The Week** 📝
 
 {events_list}
+<@1296146849517928470>
     """
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
