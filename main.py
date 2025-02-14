@@ -109,7 +109,7 @@ def happenings():
         return jsonify({"error": "No data received"}), 400
 
     # Build message with all events
-    events_list = "\n".join([f"{date}: {event}" for date, event in data.items()])
+    events_list = "\n".join([f"**{date}**: *{event}*" for date, event in data.items()])
     
     message = f"""
  ------------------------------- 
