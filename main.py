@@ -114,7 +114,7 @@ def happenings():
         return jsonify({"error": "No data received"}), 400
 
     # Build message with all events
-    events_list = "\n".join([f"**{date}**: *{event}*" for date, event in data.items()])
+    events_list = "\n".join([f"- **{date}**: *{event}*" for date, event in data.items()])
     
     message = f"""
  ------------------------------- 
@@ -143,7 +143,7 @@ def operations():
         return jsonify({"error": "No data received"}), 400
 
     # Build message with all events
-    events_list = "\n".join([f"**{date}**: *{event}*" for date, event in data.items()])
+    events_list = "\n".join([f"- **{date}**: *{event}*" for date, event in data.items()])
     
     message = f"""
  ------------------------------- 
@@ -179,7 +179,7 @@ def action_plan():
     if upto_to_date:
         message = f"""
     ------------------------------- 
-Hey sarah, 
+Hey {sarah}, 
 I just checked the action plan, and it's five weeks ahead of schedule, great work! 
 Here's a detailed breakdown of the plan for the next five weeks. 
 
@@ -188,7 +188,7 @@ Here's a detailed breakdown of the plan for the next five weeks.
     else:
         message = f"""
     ------------------------------- 
-Hey Sarah, 
+Hey {sarah}, 
 I've reviewed the action plan, and it appears we're not five weeks ahead as previously thought. 
 Below is a detailed breakdown of the current plan.
 
