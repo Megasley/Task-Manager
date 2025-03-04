@@ -135,7 +135,7 @@ def happenings():
 
 
 @app.route('/operations', methods=['POST'])
-def happenings():
+def operations():
     data = request.get_json()  # Receive JSON payload
     sarah = USER_ID.get('Sarah White')
 
