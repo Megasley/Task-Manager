@@ -174,25 +174,25 @@ def action_plan():
         return jsonify({"error": "No data received"}), 400
 
     # Build message with all events
-    events_list = "\n".join([f"**{date}**: *{event}*" for date, event in events.items()])
+    events_list = "\n".join([f"**- {date}**: *{event}*" for date, event in events.items()])
 
     if upto_to_date:
         message = f"""
     ------------------------------- 
-    Hey {sarah}, 
-    I just checked the action plan, and it's five weeks ahead of schedule, great work! 
-    Here's a detailed breakdown of the plan for the next five weeks. 
+Hey {sarah}, 
+I just checked the action plan, and it's five weeks ahead of schedule, great work! 
+Here's a detailed breakdown of the plan for the next five weeks. 
 
-    {events_list}
+{events_list}
         """
     else:
         message = f"""
     ------------------------------- 
-    Hey {sarah}, 
-    I've reviewed the action plan, and it appears we're not five weeks ahead as previously thought. 
-    Below is a detailed breakdown of the current plan.
+Hey {sarah}, 
+I've reviewed the action plan, and it appears we're not five weeks ahead as previously thought. 
+Below is a detailed breakdown of the current plan.
 
-    {events_list}
+{events_list}
         """
                 
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
