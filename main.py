@@ -44,7 +44,7 @@ def www():
 
     for task in data['tasks']:
         name = task['accountable']
-        mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly
+        mention = USER_ID.get(name, 'Unknown User')  # Use the dictionary directly 
 
         message = f"""
 **WWW Task Notification** 🔔
@@ -99,7 +99,12 @@ def sprint():
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
 
+
+
+
 #---------------------------------------------------------------------------------------
+
+
 
 @app.route('/happenings', methods=['POST'])
 def happenings():
@@ -122,7 +127,41 @@ def happenings():
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
+
+
+
 # --------------------------------------------------------------------------------------
+
+
+
+@app.route('/operations', methods=['POST'])
+def happenings():
+    data = request.get_json()  # Receive JSON payload
+    sarah = USER_ID.get('Sarah White')
+
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
+    # Build message with all events
+    events_list = "\n".join([f"**{date}**: *{event}*" for date, event in data.items()])
+    
+    message = f"""
+ ------------------------------- 
+Hey {sarah}, 
+Here’s a breakdown of your operations tasks for the next 7 weeks. 
+
+{events_list}
+    """
+    asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
+
+    return jsonify({"status": "success", "message": "Webhook received"}), 200
+
+
+
+
+#---------------------------------------------------------------------------------------
+
+
 
 @app.route('/update', methods=['POST'])
 def update():
