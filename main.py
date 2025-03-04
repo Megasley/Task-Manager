@@ -163,6 +163,45 @@ Here’s a breakdown of your operations tasks for the next 7 weeks.
 
 
 
+@app.route('/plan', methods=['POST'])
+def action_plan():
+    data = request.get_json()  # Receive JSON payload
+    sarah = USER_ID.get('Sarah White')
+    upto_to_date = data['hasSevenEvents']
+    events = data['events']
+
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
+    # Build message with all events
+    events_list = "\n".join([f"**{date}**: *{event}*" for date, event in events.items()])
+
+    if upto_to_date:
+        message = f"""
+    ------------------------------- 
+    Hey {sarah}, 
+    I just checked the action plan, and it's five weeks ahead of schedule, great work! 
+    Here's a detailed breakdown of the plan for the next five weeks. 
+
+    {events_list}
+        """
+    else:
+        message = f"""
+    ------------------------------- 
+    Hey {sarah}, 
+    I've reviewed the action plan, and it appears we're not five weeks ahead as previously thought. 
+    Below is a detailed breakdown of the current plan.
+
+    {events_list}
+        """
+                
+    asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
+
+    return jsonify({"status": "success", "message": "Webhook received"}), 200
+
+
+
+#--------------------------------------------------------------------------------------
 @app.route('/update', methods=['POST'])
 def update():
     data = request.get_json()
