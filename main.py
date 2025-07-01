@@ -82,64 +82,65 @@ def feedback():
     # entry_date = data['columnData']['col5']
     if row == 3:
         message = f"""
-    ------------------------------- 
-    **Feedback Task Assigned** 📋
+------------------------------- 
+**Feedback Task Assigned** 📋
 
-    ***Feeback Task:*** {feedback}
+***Feeback Task:*** {feedback}
 
-    ***Assigned to:*** {mention}
-    ***Source:*** {source}
-    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
-    ***Status:*** {status}
-    ***Date Completed:*** {date_completed}
-    ***Comment:*** {comment}
-        """
+***Assigned to:*** {mention}
+***Source:*** {source}
+***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Status:*** {status}
+***Date Completed:*** {date_completed}
+***Comment:*** {comment}
+    """
 
     elif row == 5:
         message = f"""
-    ------------------------------- 
-    **Feedback Task Status Changed** 🔄
+------------------------------- 
+**Feedback Task Status Changed** 🔄
 
-    ***Feeback Task:*** {feedback}
+***Feeback Task:*** {feedback}
 
-    ***Assigned to:*** {mention}
-    ***Source:*** {source}
-    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
-    ***Status:*** {status}
-    ***Date Completed:*** {date_completed}
-    ***Comment:*** {comment}
+***Assigned to:*** {mention}
+***Source:*** {source}
+***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Status:*** {status}
+***Date Completed:*** {date_completed}
+***Comment:*** {comment}
         """
     elif row == 7:
         message = f"""
-    ------------------------------- 
-    **New Comment on Feedback Task** 💬
+------------------------------- 
+**New Comment on Feedback Task** 💬
 
-    ***Feeback Task:*** {feedback}
+***Feeback Task:*** {feedback}
 
-    ***Assigned to:*** {mention}
-    ***Source:*** {source}
-    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
-    ***Status:*** {status}
-    ***Date Completed:*** {date_completed}
-    ***Comment:*** {comment}
-        """
+***Assigned to:*** {mention}
+***Source:*** {source}
+***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Status:*** {status}
+***Date Completed:*** {date_completed}
+***Comment:*** {comment}
+    """
 
     elif row == 4:
         message = f"""
-    **Feedback Task Notification** 🔔
+------------------------------- 
+**Feedback Task Notification** 🔔
 
-    Hey {mention}, you have an overdue task on Feedback sheet.
+Hey {mention}, you have an overdue task on Feedback sheet.
 
-    ***Feeback Task:*** {feedback}
+***Feeback Task:*** {feedback}
 
-    ***Assigned to:*** {mention}
-    ***Source:*** {source}
-    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
-    ***Status:*** {status}
-    ***Comment:*** {comment}
+***Assigned to:*** {mention}
+***Source:*** {source}
+***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Status:*** {status}
+***Comment:*** {comment}
 
-    Please complete the task as soon as possible.
-    """
+Please complete the task as soon as possible.
+"""
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
