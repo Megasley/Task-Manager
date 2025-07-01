@@ -66,7 +66,7 @@ Please complete the task as soon as possible.
 
 # --------------------------------------------------------------------------------------
 
-@app.route('/feeback', methods=['POST'])
+@app.route('/feedback', methods=['POST'])
 def feedback():
     data = request.get_json()
     feedback = data['columnData']['col1']
