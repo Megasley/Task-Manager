@@ -28,15 +28,18 @@ USER_ID = {
     'Sarah White': os.environ.get('USER_ID_SARAH_WHITE'),
     'Megasley': os.environ.get('USER_ID_MEGASLEY'),
     'Satoshee': os.environ.get('USER_ID_SATOSHEE'),
-    'EVerything Satoshee': os.environ.get('USER_ID_ES'),
     'Lys': os.environ.get('USER_ID_LYS'),
     'Vviey': os.environ.get('USER_ID_VVY'),
-    'Everything Satoshee': os.environ.get('USER_ID_EV'),
 }
+
+
+# --------------------------------------------------------------------------------------
 
 @app.route('/')
 def index():
     return "Bot is Alive"
+
+# --------------------------------------------------------------------------------------
 
 @app.route('/www', methods=['POST'])
 def www():
@@ -61,22 +64,33 @@ Please complete the task as soon as possible.
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
 
+# --------------------------------------------------------------------------------------
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
+@app.route('/feeback', methods=['POST'])
+def feedback():
     data = request.get_json()
+    feedback = data['columnData']['col1']
+    source = data['columnData']['col2']
+    accountable = data['columnData']['col3']
+    mention = USER_ID.get(accountable, 'Unknown User')
+    due = data['columnData']['col4']
+    status = data['columnData']['col5']
+    date_completed = data['columnData']['col6']
+    comment = data['columnData']['col7']
 
-    entry_date = data['columnData']['col5']
+    # entry_date = data['columnData']['col5']
 
     message = f"""
 ------------------------------- 
 **Feedback Task Assigned** 📋
 
-***Row:*** **{data['row']}**
-***Assigned to:*** {data['new']}
-***Feedback:*** {data['columnData']['col1']}
-***Source:*** {data['columnData']['col3']}
-***Entry Date:*** {datetime.strptime(entry_date, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Feeback:*** **{feedback}**
+***Assigned to:*** {mention}
+***Source:*** {source}
+***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+***Status:*** {status}
+***Date Completed:*** {date_completed}
+***Comment:*** {comment}
     """
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
