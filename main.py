@@ -69,6 +69,7 @@ Please complete the task as soon as possible.
 @app.route('/feedback', methods=['POST'])
 def feedback():
     data = request.get_json()
+    row = data['row']
     feedback = data['columnData']['col1']
     source = data['columnData']['col2']
     accountable = data['columnData']['col3']
@@ -79,19 +80,50 @@ def feedback():
     comment = data['columnData']['col7']
 
     # entry_date = data['columnData']['col5']
+    if row == 3:
+        message = f"""
+    ------------------------------- 
+    **Feedback Task Assigned** 📋
 
-    message = f"""
-------------------------------- 
-**Feedback Task Assigned** 📋
+    ***Feeback Task:*** {feedback}
 
-***Feeback:*** **{feedback}**
-***Assigned to:*** {mention}
-***Source:*** {source}
-***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
-***Status:*** {status}
-***Date Completed:*** {date_completed}
-***Comment:*** {comment}
-    """
+    ***Assigned to:*** {mention}
+    ***Source:*** {source}
+    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+    ***Status:*** {status}
+    ***Date Completed:*** {date_completed}
+    ***Comment:*** {comment}
+        """
+
+    elif row == 5:
+        message = f"""
+    ------------------------------- 
+    **Feedback Task Status Changed** 🔄
+
+    ***Feeback Task:*** {feedback}
+
+    ***Assigned to:*** {mention}
+    ***Source:*** {source}
+    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+    ***Status:*** {status}
+    ***Date Completed:*** {date_completed}
+    ***Comment:*** {comment}
+        """
+    elif row == 7:
+        message = f"""
+    ------------------------------- 
+    **New Comment on Feedback Task** 💬
+
+    ***Feeback Task:*** {feedback}
+
+    ***Assigned to:*** {mention}
+    ***Source:*** {source}
+    ***Due Date:*** {datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ").date()}
+    ***Status:*** {status}
+    ***Date Completed:*** {date_completed}
+    ***Comment:*** {comment}
+        """
+
     asyncio.run_coroutine_threadsafe(send_to_discord(message), bot.loop)
 
     return jsonify({"status": "success", "message": "Webhook received"}), 200
