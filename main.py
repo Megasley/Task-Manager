@@ -70,7 +70,7 @@ Please complete the task as soon as possible.
 def feedback():
     data = request.get_json()
     row = data['row']
-    column = data['columnData']
+    column = data['editedColumn']
     feedback = data['columnData']['col1']
     source = data['columnData']['col2']
     accountable = data['columnData']['col3']
@@ -81,7 +81,7 @@ def feedback():
     comment = data['columnData']['col7']
 
     # entry_date = data['columnData']['col5']
-    if row == 3:
+    if column == 3:
         message = f"""
 ------------------------------- 
 **Feedback Task Assigned** 📋
@@ -96,7 +96,7 @@ def feedback():
 ***Comment:*** {comment}
     """
 
-    elif row == 5:
+    elif column == 5:
         message = f"""
 ------------------------------- 
 **Feedback Task Status Changed** 🔄
@@ -110,7 +110,7 @@ def feedback():
 ***Date Completed:*** {date_completed}
 ***Comment:*** {comment}
         """
-    elif row == 7:
+    elif column == 7:
         message = f"""
 ------------------------------- 
 **New Comment on Feedback Task** 💬
@@ -125,7 +125,7 @@ def feedback():
 ***Comment:*** {comment}
     """
 
-    elif row == 4:
+    elif column == 4:
         message = f"""
 ------------------------------- 
 **Feedback Task Notification** 🔔
