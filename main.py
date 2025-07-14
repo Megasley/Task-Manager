@@ -70,7 +70,7 @@ Please complete the task as soon as possible.
 def feedback():
     data = request.get_json()
     row = data['row']
-    column = data['editedColumn']
+    column = data['column']
     feedback = data['columnData']['col1']
     source = data['columnData']['col2']
     accountable = data['columnData']['col3']
